@@ -1,0 +1,13 @@
+<!-- This is a html file it create a GUI for main/new which allows us to create a new movie there-->
+
+{% extends 'main.html' %}
+
+{% block title %} Save post {% endblock %}
+
+{% block body %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Add</button>
+    </form>
+{% endblock %}

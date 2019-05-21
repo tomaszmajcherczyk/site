@@ -1,0 +1,47 @@
+<!-- This is a html file for a all posts site: main/posts
+1.
+This anchor: {# <a href="{% url 'edit_post' post.id %}">Edit</a> #} create a button next to each post on a main/posts so
+a post can be edited through there by a simple user
+2.   {#  {% if user.is_authenticated %}  #}
+is a build-in django function it basically mean if user is authenticated do this, else: do something that
+3. this whole grid system explained here {# https://getbootstrap.com/docs/4.3/layout/grid/ #} this col-sm-9, 3
+ -->
+{% extends 'main.html' %}
+
+{% block title %} Posts {% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron">
+      <h1 class="display-4">
+          {% if user.is_authenticated %}
+            Witaj {{ user.username }} <br>
+            <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+        {% endif %}
+      </h1>
+          <hr class="my-4">
+          <h2>List of all posts</h2>
+    </div>
+
+        <a href="{% url 'new_post' %}"><i class="fas fa-2x fa-plus-square"></i></a>
+        <br>
+        {% for post in posts %}
+        <div class="card">
+            <div class="card-body">
+                <h2> {{post}} </h2>
+                <img src="/media/{{post.photo}}">
+                <div class="row">
+                    <div class="col-sm-10">
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="{% url 'edit_post' post.id %}"><i class="fas fa-2x fa-edit"></i></a>
+                        <a href="{% url 'delete_post' post.id %}"><i class="fas fa-2x fa-trash"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+{% endblock %}
+
