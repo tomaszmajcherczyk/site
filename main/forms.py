@@ -6,4 +6,4 @@ from .models import ImgPost
 class ImgPostForm(ModelForm):
     class Meta:
         model = ImgPost
-        fields = ['title', 'rating', 'photo', 'pub_date']
+        fields = ['title', 'rating', 'photo', 'pub_date', 'author']

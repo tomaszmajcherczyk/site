@@ -6,7 +6,7 @@ from .models import ImgPost
 
 @admin.register(ImgPost)
 class ImgPostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'rating', 'pub_date')  # this being displayed on the /admin
+    list_display = ('title', 'rating', 'pub_date', 'author')  # this being displayed on the /admin
 
 
 # @admin.register(SiteUser)

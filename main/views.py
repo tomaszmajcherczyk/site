@@ -18,10 +18,10 @@ def img_post_list(ListView):
     return render(ListView, 'lista.html', {'posts': posts})
 
 
+
 @login_required()  # prevent from using this function when unlogged.
 def new_post(request):
     form = ImgPostForm(request.POST or None, request.FILES or None)
-
     if form.is_valid():
         form.save()
         return redirect(img_post_list)
