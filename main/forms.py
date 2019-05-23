@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import ImgPost
+from .models import ImgPost, ImgPostTag
 from django import forms
 
 
@@ -7,6 +7,12 @@ from django import forms
 class ImgPostForm(ModelForm):
     class Meta:
         model = ImgPost
-        fields = ['title', 'rating', 'photo', 'pub_date', 'author']
+        fields = ['title', 'rating', 'photo', 'author']
         widgets = {'author': forms.HiddenInput()}  # make the author field hidden, but only on the /new/posts it's still
         # visible on admin
+
+
+class ImgPostTagForm(ModelForm):
+    class Meta:
+        model = ImgPostTag
+        fields = ['tag_name', 'img_tag']

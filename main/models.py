@@ -18,13 +18,12 @@ from django.contrib import admin
 
 class ImgPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    # author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    pub_date = models.CharField(max_length=200, null=True, blank=True)
+    # pub_date = models.CharField(max_length=200, null=True, blank=True)
     title = models.TextField(default="post")
     rating = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)  # by default django won't display it on admin
     date = models.DateField(default=timezone.now)
-    time = models.TimeField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.title_with_rating()
@@ -33,5 +32,9 @@ class ImgPost(models.Model):
         return str(self.title) + " (" + str(self.rating) + ")"
 
 
+class ImgPostTag(models.Model):
+    tag_name = models.CharField(max_length=50)
+    img_tag = models.ManyToManyField(ImgPost, related_name="tags", blank=True)
 
-    #def edit(self):
+    def get_tags(self):
+        return self.img_tag.all()

@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ImgPost
-from .forms import ImgPostForm
+from .forms import ImgPostForm, ImgPostTag
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -28,11 +28,12 @@ def img_post_list(ListView):
 def new_post(request):
     user = request.user
     form = ImgPostForm(request.POST or None, request.FILES or None, initial={'author': user})
+    tag_form = ImgPostTag(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
-        return redirect(img_post_list)
+        return redirect(img_post_list, tag_form)
 
-    return render(request, 'new_post.html', {'form': form})
+    return render(request, 'new_post.html', {'form': form}, {'tag_form': tag_form})
 
 
 @login_required()
