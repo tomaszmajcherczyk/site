@@ -15,6 +15,12 @@ from django.contrib import admin
 #     def __str__(self):
 #         return str(self.first_name) + " " + str(self.last_name)
 
+class ImgPostTag(models.Model):
+    tag_name = models.SlugField(max_length=50)
+
+    def __str__(self):
+        return self.tag_name
+
 
 class ImgPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -24,6 +30,7 @@ class ImgPost(models.Model):
     photo = models.ImageField(null=True, blank=True)  # by default django won't display it on admin
     date = models.DateField(default=timezone.now)
     time = models.TimeField(null=True, blank=True, default=timezone.now)
+    img_tag = models.ManyToManyField(ImgPostTag, related_name="tags", blank=True)
 
     def __str__(self):
         return self.title_with_rating()
@@ -32,9 +39,3 @@ class ImgPost(models.Model):
         return str(self.title) + " (" + str(self.rating) + ")"
 
 
-class ImgPostTag(models.Model):
-    tag_name = models.CharField(max_length=50)
-    img_tag = models.ManyToManyField(ImgPost, related_name="tags", blank=True)
-
-    def get_tags(self):
-        return self.img_tag.all()

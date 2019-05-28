@@ -11,4 +11,4 @@ class ImgPostAdmin(admin.ModelAdmin):
 
 @admin.register(ImgPostTag)
 class ImgPostTagAdmin(admin.ModelAdmin):
-    list_display = ('tag_name', 'get_tags')
+    list_display = ('tag_name',)

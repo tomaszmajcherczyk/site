@@ -18,22 +18,16 @@ def img_post_list(ListView):
     return render(ListView, 'lista.html', {'posts': posts})
 
 
-# def my_view(request):
-#     username = None
-#     if request.user.is_authenticated:
-#         username = request.user.username
-
-
 @login_required()  # prevent from using this function when unlogged.
 def new_post(request):
     user = request.user
     form = ImgPostForm(request.POST or None, request.FILES or None, initial={'author': user})
-    tag_form = ImgPostTag(request.POST or None, request.FILES or None)
+    # tag_form = ImgPostTag(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
-        return redirect(img_post_list, tag_form)
+        return redirect(img_post_list)
 
-    return render(request, 'new_post.html', {'form': form}, {'tag_form': tag_form})
+    return render(request, 'new_post.html', {'form': form})
 
 
 @login_required()
