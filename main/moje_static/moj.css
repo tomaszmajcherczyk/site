@@ -5,3 +5,7 @@ body {
 .card {
     width: 600px;
 }
+.img_post {
+    width: 300px;
+    height: auto;
+}

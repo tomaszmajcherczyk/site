@@ -6,6 +6,7 @@ a post can be edited through there by a simple user
 is a build-in django function it basically mean if user is authenticated do this, else: do something that
 3. this whole grid system explained here {# https://getbootstrap.com/docs/4.3/layout/grid/ #} this col-sm-9, 3
  -->
+
 {% extends 'main.html' %}
 
 {% block title %} Posts {% endblock %}
@@ -24,14 +25,18 @@ is a build-in django function it basically mean if user is authenticated do this
           <hr class="my-4">
           <h2>List of all posts</h2>
     </div>
-
         <a href="{% url 'new_post' %}"><i class="fas fa-2x fa-plus-square"></i></a>
         <br>
         {% for post in posts %}
         <div class="card">
             <div class="card-body">
-                <h2> {{post}} </h2>
-                <img src="/media/{{post.photo}}">
+                <h2> {{post.author}} </h2>
+                <p>
+                {% for tag in post.img_tags.all %}
+                <a href="{% url 'one_tag' name=tag.tag_name %}">{{tag}}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                </p>
+                <img class="img_post" src="/media/{{post.photo}}">
                 <div class="row">
                     <div class="col-sm-10">
                     </div>
@@ -43,5 +48,29 @@ is a build-in django function it basically mean if user is authenticated do this
             </div>
         </div>
         {% endfor %}
-{% endblock %}
+<nav aria-label="Page navigation example">{% if posts.has_other_pages %}
+  <ul class="pagination">
+    {% if posts.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+    {% else %}
+      <!-- {# <li class="disabled"><span>&laquo;</span></li> #} -->
+    {% endif %}
+    {% for i in posts.paginator.page_range %}
+      {% if posts.number == i %}
+        <li class="page-item active">
+            <a class="page-link"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if posts.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
 
+    {% else %}
+     <!-- {# <li class="disabled"><span>&raquo;</span></li> #} -->
+    {% endif %}
+  </ul>
+{% endif %}
+</nav>
+{% endblock %}

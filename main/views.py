@@ -2,27 +2,45 @@
 Those are basically functions for my main/urls. They allow to perform some given tasks there, like adding a new post on
 main/new
 """
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import ImgPost
-from .forms import ImgPostForm, ImgPostTag
 from django.views.generic import ListView
+
+from .models import ImgPost
+from .forms import ImgPostForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
-def img_post_list(ListView):
+def img_post_list(request):
     posts = ImgPost.objects.all()
-    return render(ListView, 'lista.html', {'posts': posts})
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 10)  # shows 10 contacts per page
+
+    try:
+        posts = paginator.get_page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+
+#  those 3 lines are what for? commented them and no change?
+    # tag = request.GET.get('tag')
+    # if tag:
+    #     posts = posts.filter(img_tags__tag_name=tag)
+
+    return render(request, 'lista.html', {'posts': posts})
 
 
 @login_required()  # prevent from using this function when unlogged.
 def new_post(request):
     user = request.user
     form = ImgPostForm(request.POST or None, request.FILES or None, initial={'author': user})
-    # tag_form = ImgPostTag(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
         return redirect(img_post_list)
@@ -51,3 +69,8 @@ def delete_post(request, id):
         return redirect(img_post_list)
 
     return render(request, 'confirm.html', {'post': post})
+
+
+def one_tag(request, name):
+    posts = ImgPost.objects.filter(img_tags__tag_name=name)
+    return render(request, 'lista.html', {'posts': posts})
