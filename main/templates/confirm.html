@@ -7,6 +7,7 @@
     <h1>Do you really want to delete? {{ post.title }}</h1>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">yes</button>
+        <a href="{% url 'all_posts' %}" class="btn btn-primary">Cancel <i class="fas fa-undo"></i></a>
+        <button class="btn btn-primary">Yes <i class="fas fa-sign-in-alt"></i></button>
     </form>
 {% endblock %}

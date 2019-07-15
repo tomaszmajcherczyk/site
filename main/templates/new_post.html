@@ -10,7 +10,8 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|bootstrap }}
-              <button type="submit" class="btn btn-primary">Add <i class="fas fa-sign-in-alt"></i></button>
+                <a href="{% url 'all_posts' %}" class="btn btn-primary">Cancel <i class="fas fa-undo"></i></a>
+                <button class="btn btn-primary">Add <i class="fas fa-sign-in-alt"></i></button>
             </form>
           </div>
         </div>

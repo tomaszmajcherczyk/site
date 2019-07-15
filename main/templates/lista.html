@@ -6,42 +6,111 @@ a post can be edited through there by a simple user
 is a build-in django function it basically mean if user is authenticated do this, else: do something that
 3. this whole grid system explained here {# https://getbootstrap.com/docs/4.3/layout/grid/ #} this col-sm-9, 3
  -->
+
 {% extends 'main.html' %}
 
 {% block title %} Posts {% endblock %}
 
 {% block body %}
-
-    <div class="jumbotron">
-      <h1 class="display-4">
+<!-- navi bar on top  -->
+<nav class="navbar navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <h5 class="display-8">
           {% if user.is_authenticated %}
-            Witaj {{ user.username }} <br>
+          Hello {{ user.username }} <br>
             <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
         {% else %}
             <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
         {% endif %}
-      </h1>
-          <hr class="my-4">
-          <h2>List of all posts</h2>
-    </div>
+    </h5>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'all_posts' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'new_post' %}">New post</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<!-- navi bar on top  end -->
 
-        <a href="{% url 'new_post' %}"><i class="fas fa-2x fa-plus-square"></i></a>
-        <br>
-        {% for post in posts %}
-        <div class="card">
-            <div class="card-body">
-                <h2> {{post}} </h2>
-                <img src="/media/{{post.photo}}">
-                <div class="row">
-                    <div class="col-sm-10">
-                    </div>
-                    <div class="col-sm-2">
-                        <a href="{% url 'edit_post' post.id %}"><i class="fas fa-2x fa-edit"></i></a>
-                        <a href="{% url 'delete_post' post.id %}"><i class="fas fa-2x fa-trash"></i></a>
-                    </div>
-                </div>
+
+<a href="{% url 'new_post' %}"><i class="fas fa-2x fa-plus-square"></i></a>
+<a href="{% url 'all_posts' %}"><i class="fas fa-2x fa-home"></i></a>
+<br>
+{% for post in posts %}
+<div class="card">
+    <div class="card-body">
+        <h2> {{post.author}} </h2>
+        <p>
+        {% for tag in post.img_tags.all %}
+        <a href="{% url 'one_tag' name=tag.tag_name %}">{{tag}}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </p>
+        <div class="zoom">
+            <img class="img_post" src="/media/{{post.photo}}">
+        </div>
+        <div class="row">
+            <div class="col-sm-10">
+            </div>
+            <div class="col-sm-2">
+                <a href="{% url 'edit_post' post.id %}"><i class="fas fa-2x fa-edit"></i></a>
+                <a href="{% url 'delete_post' post.id %}"><i class="fas fa-2x fa-trash"></i></a>
             </div>
         </div>
+    </div>
+</div>
         {% endfor %}
-{% endblock %}
+<!-- pagination  -->
+            <!-- {# #}-->
+<nav aria-label="Page navigation example">{% if posts.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if posts.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+    {% else %}
+       {# <li class="disabled"><span>&laquo;</span></li> #}
+    {% endif %}
+    {% for i in posts.paginator.page_range %}
+      {% if posts.number == i %}
+        <li class="page-item active">
+            <a class="page-link"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if posts.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
 
+    {% else %}
+     <!-- {# <li class="disabled"><span>&raquo;</span></li> #} -->
+    {% endif %}
+  </ul>
+{% endif %}
+</nav>
+<!-- pagination end-->
+{% endblock %}
