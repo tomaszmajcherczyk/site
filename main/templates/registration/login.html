@@ -10,10 +10,11 @@
             {% csrf_token %}
             {{ form|bootstrap }}
           <button type="submit" class="btn btn-primary">Login <i class="fas fa-sign-in-alt"></i></button>
+          <br>
+          <a href="{% url 'signup' %}">Don't have an account? Sign up</a>
+
         </form>
       </div>
     </div>
 
 {% endblock %}
-
-

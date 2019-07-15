@@ -1,11 +1,30 @@
 body {
     color: #444;
     padding: 50px;
+    text-align: center;
 }
+
 .card {
+    margin: auto;
     width: 600px;
+    text-align: center;
+    overflow: absolute;
 }
+
 .img_post {
     width: 300px;
     height: auto;
+    text-align: center;
+    overflow: hidden;
 }
+
+.img_post:hover {
+    position:relative;
+    top:-25px;
+    left:-35px;
+    width:600px;
+    height:auto;
+    display:block;
+    z-index:999;
+}
+

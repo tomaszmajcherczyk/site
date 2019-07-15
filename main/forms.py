@@ -9,7 +9,6 @@ class ImgPostForm(ModelForm):
     class Meta:
         model = ImgPost
         fields = ['title', 'rating', 'photo', 'img_tags', 'author']
-        widgets = {'author': forms.HiddenInput()}  # make the author field hidden, but only on the /new/posts it's still
-        # visible on admin
-
+        widgets = {'rating': forms.HiddenInput(), 'author': forms.HiddenInput()}  # make the author field hidden, but
+        # only on the /new/posts it's still visible on admin
 
